@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ScreenGuide AI — Phase 8</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#0b1020;color:#eef2ff}
+button,input{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 10%,#273b88 0,#0b1020 42%)}
+.card{background:#111936;border:1px solid #26345f;border-radius:22px;box-shadow:0 20px 70px #0006}
+.auth .card{width:min(430px,100%);padding:32px}.brand{font-weight:800;font-size:25px}.brand span{color:#7c9cff}
+.muted{color:#9aa7c7}.field{margin:16px 0}.field label{display:block;font-size:13px;color:#aab5d1;margin-bottom:7px}.field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #31406d;background:#0c1329;color:#fff}
+.primary{background:#6d8cff;color:#fff;padding:12px 16px;border-radius:12px;font-weight:700}.secondary{background:#1b2648;color:#dce5ff;padding:10px 14px;border-radius:11px}.danger{background:#5c2231;color:#ffdce4;padding:10px 14px;border-radius:11px}
+body.app{background:#f5f7fb;color:#172033}.app .sidebar{background:#0e1530;color:#eaf0ff}.layout{min-height:100vh;display:grid;grid-template-columns:240px 1fr}.sidebar{padding:22px 16px;position:sticky;top:0;height:100vh}.nav{display:grid;gap:8px;margin-top:28px}.nav button{background:transparent;color:#aeb9d7;text-align:left;padding:12px;border-radius:11px}.nav button.active,.nav button:hover{background:#1b2850;color:#fff}.profile{position:absolute;bottom:20px;left:16px;right:16px;border-top:1px solid #26345a;padding-top:15px}
+.main{padding:28px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.title{font-size:28px;font-weight:800}.grid{display:grid;grid-template-columns:1.35fr .9fr;gap:18px}.panel{background:#fff;border:1px solid #e2e7f0;border-radius:18px;padding:18px;box-shadow:0 7px 25px #14244a0b}.panel h3{margin:0 0 14px}.video-wrap{background:#080d1c;border-radius:15px;overflow:hidden;min-height:360px;display:grid;place-items:center;position:relative}.video-wrap video{width:100%;max-height:620px;object-fit:contain}.pointer{position:absolute;width:58px;height:58px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 7px #6d8cff88;transform:translate(-50%,-50%);pointer-events:none}.pointer:after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}.target{position:absolute;left:18px;top:18px;background:#111936dd;color:#fff;padding:7px 10px;border-radius:9px;font-size:12px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#f0f3fa;border-radius:13px;padding:14px}.stat b{display:block;font-size:23px}.progress{height:9px;background:#e4e9f2;border-radius:20px;overflow:hidden}.bar{height:100%;background:#6d8cff;width:0}.steps{display:grid;gap:8px}.step{padding:12px;border:1px solid #e0e5ee;border-radius:12px;display:flex;gap:10px}.step.done{background:#eefaf3;border-color:#b9e7ca}.dot{width:22px;height:22px;border-radius:50%;background:#dce3f2;display:grid;place-items:center;font-size:12px;flex:none}.done .dot{background:#35a765;color:#fff}.chat{height:350px;overflow:auto;background:#f6f8fc;border-radius:13px;padding:12px;display:grid;align-content:start;gap:9px}.msg{padding:10px 12px;border-radius:12px;max-width:90%;font-size:14px}.ai{background:#e8edff}.user{background:#dff5e8;justify-self:end}.small{font-size:12px}.view{display:none}.view.active{display:block}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #e7ebf2;font-size:13px}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#e9edff;color:#4058a5;font-size:11px}.toast{position:fixed;right:20px;bottom:20px;background:#111936;color:#fff;padding:12px 15px;border-radius:11px;display:none;z-index:5}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.sidebar{height:auto;position:relative}.profile{position:static;margin-top:20px}.grid{grid-template-columns:1fr}.statrow{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="auth" class="auth">
+  <div class="card">
+    <div class="brand">ScreenGuide <span>AI</span></div>
+    <p class="muted">Phase 8 · Production-style visual task agent</p>
+    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+    <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••"></div>
+    <button id="loginBtn" class="primary" style="width:100%">Sign in</button>
+    <button id="registerBtn" class="secondary" style="width:100%;margin-top:9px">Create account</button>
+    <p id="authMsg" class="muted small"></p>
+  </div>
+</div>
+
+<div id="app" class="layout hidden">
+  <aside class="sidebar">
+    <div class="brand">ScreenGuide <span>AI</span></div>
+    <div class="muted small">REAL-TIME AGENT · PHASE 8</div>
+    <div class="nav">
+      <button data-view="live" class="active">🎯 Live Agent</button>
+      <button data-view="dashboard">📊 Dashboard</button>
+      <button data-view="replay">🎥 Session Replay</button>
+      <button data-view="history">🕘 History</button>
+      <button data-view="admin">👥 Team & Admin</button>
+    </div>
+    <div class="profile">
+      <div id="userEmail" class="small"></div>
+      <button id="logout" class="secondary" style="width:100%;margin-top:8px">Log out</button>
+    </div>
+  </aside>
+  <main class="main">
+    <section id="live" class="view active">
+      <div class="top"><div><div class="title">Live Agent</div><div class="muted">Share your screen and let ScreenGuide explain the next safe action.</div></div><button id="newTask" class="secondary">＋ New task</button></div>
+      <div class="grid">
+        <div class="panel">
+          <h3>Screen workspace</h3>
+          <div class="video-wrap">
+            <video id="screen" autoplay muted playsinline></video>
+            <div id="pointer" class="pointer hidden"></div><div id="target" class="target hidden"></div>
+            <div id="videoHint" class="muted">No screen shared</div>
+          </div>
+          <div class="actions">
+            <button id="share" class="primary">Start Screen Share</button>
+            <button id="analyze" class="secondary">Analyze</button>
+            <button id="continuous" class="secondary">Continuous: OFF</button>
+            <button id="record" class="secondary">Record</button>
+          </div>
+          <div class="statrow" style="margin-top:14px">
+            <div class="stat"><span class="muted small">Progress</span><b id="pct">0%</b></div>
+            <div class="stat"><span class="muted small">Agent</span><b id="agentState">Idle</b></div>
+            <div class="stat"><span class="muted small">Steps</span><b id="stepCount">0/0</b></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Task goal</h3>
+          <div id="goalBox" class="muted">Create a task to begin.</div>
+          <div class="progress" style="margin:12px 0"><div id="bar" class="bar"></div></div>
+          <div id="steps" class="steps"></div>
+          <hr style="border:0;border-top:1px solid #e8ebf2;margin:18px 0">
+          <h3>AI conversation</h3>
+          <div id="chat" class="chat"></div>
+          <div class="actions"><button id="voice" class="secondary">🎙 Voice Input</button><button id="speak" class="secondary">🔊 Read Last</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboard" class="view">
+      <div class="top"><div><div class="title">Dashboard</div><div class="muted">Workspace overview and task health.</div></div></div>
+      <div class="statrow">
+        <div class="stat panel"><span class="muted small">Tasks</span><b id="dTasks">0</b></div>
+        <div class="stat panel"><span class="muted small">Completed</span><b id="dDone">0</b></div>
+        <div class="stat panel"><span class="muted small">Sessions</span><b id="dSessions">0</b></div>
+      </div>
+      <div class="panel" style="margin-top:18px"><h3>Recent tasks</h3><div id="recentTasks"></div></div>
+    </section>
+
+    <section id="replay" class="view">
+      <div class="top"><div><div class="title">Session Replay</div><div class="muted">Recordings created in this browser.</div></div></div>
+      <div class="panel"><div id="replays" class="steps"></div></div>
+    </section>
+
+    <section id="history" class="view">
+      <div class="top"><div><div class="title">History</div><div class="muted">Your local task and agent activity.</div></div></div>
+      <div class="panel"><table class="table"><thead><tr><th>Time</th><th>Task</th><th>Status</th><th>Progress</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+    </section>
+
+    <section id="admin" class="view">
+      <div class="top"><div><div class="title">Team & Admin</div><div class="muted">Project members and production architecture.</div></div></div>
+      <div class="panel"><h3>Project Team</h3><div class="steps">
+        <div class="step"><div class="dot">1</div><div><b>Vishnu Dev Mishra</b><div class="muted small">Lead Developer</div></div></div>
+        <div class="step"><div class="dot">2</div><div><b>Prity Kumari</b><div class="muted small">Project Member</div></div></div>
+      </div></div>
+      <div class="panel" style="margin-top:18px"><h3>Production architecture</h3><p class="muted">FastAPI + WebSocket live transport · JWT authentication · SQLAlchemy persistence · PostgreSQL-ready database · dynamic task planner · server-side vision model calls.</p></div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+const API = location.origin;
+let token = localStorage.getItem("sg_token"), user = JSON.parse(localStorage.getItem("sg_user")||"null");
+let task = JSON.parse(localStorage.getItem("sg_task")||"null"), sessions=JSON.parse(localStorage.getItem("sg_sessions")||"[]");
+let stream=null, recorder=null, chunks=[], continuous=false, timer=null, lastAnswer="";
+const $=id=>document.getElementById(id);
+function toast(x){$("toast").textContent=x;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2200)}
+function save(){localStorage.setItem("sg_task",JSON.stringify(task));localStorage.setItem("sg_sessions",JSON.stringify(sessions))}
+function headers(){return {"Content-Type":"application/json","Authorization":"Bearer "+token}}
+async function api(path,opts={}){opts.headers={...(opts.headers||{}),...headers()};let r=await fetch(API+path,opts);if(!r.ok)throw new Error(await r.text());return r.json()}
+function showApp(){ $("auth").classList.add("hidden");$("app").classList.remove("hidden");document.body.className="app";$("userEmail").textContent=user?.email||"";renderAll()}
+function showAuth(){ $("auth").classList.remove("hidden");$("app").classList.add("hidden");document.body.className=""}
+async function auth(mode){try{let data=await fetch(API+"/api/auth/"+mode,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("email").value,password:$("password").value})});let j=await data.json();if(!data.ok)throw Error(j.detail||"Authentication failed");token=j.access_token;user=j.user;localStorage.setItem("sg_token",token);localStorage.setItem("sg_user",JSON.stringify(user));showApp()}catch(e){$("authMsg").textContent=e.message}}
+$("loginBtn").onclick=()=>auth("login");$("registerBtn").onclick=()=>auth("register");$("logout").onclick=()=>{localStorage.removeItem("sg_token");localStorage.removeItem("sg_user");token=null;showAuth()}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(b.dataset.view).classList.add("active");renderAll()});
+$("newTask").onclick=async()=>{let goal=prompt("What do you want to accomplish?","Submit my scholarship form");if(!goal)return;try{let j=await api("/api/tasks/plan",{method:"POST",body:JSON.stringify({goal})});task=j;save();renderAll();addChat("ai","Task planned. Share your screen and follow the highlighted guidance.");}catch(e){toast(e.message)}};
+async function capture(){if(!stream)return null;let v=$("screen"), c=document.createElement("canvas");c.width=v.videoWidth||1280;c.height=v.videoHeight||720;c.getContext("2d").drawImage(v,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.72)}
+$("share").onclick=async()=>{try{stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});$("screen").srcObject=stream;$("videoHint").classList.add("hidden");stream.getVideoTracks()[0].onended=()=>{stream=null;$("screen").srcObject=null;$("videoHint").classList.remove("hidden")};toast("Screen sharing started")}catch(e){toast("Screen share cancelled")}};
+$("analyze").onclick=()=>analyze();
+$("continuous").onclick=()=>{continuous=!continuous;$("continuous").textContent="Continuous: "+(continuous?"ON":"OFF");if(continuous){analyze();timer=setInterval(analyze,8000)}else clearInterval(timer)};
+async function analyze(){if(!stream){toast("Start screen share first");return}if(!task){toast("Create a task first");return}$("agentState").textContent="Thinking…";try{let image=await capture();let j=await api("/api/agent",{method:"POST",body:JSON.stringify({image,goal:task.goal,steps:task.steps,current_step:task.current_step})});lastAnswer=j.answer||"";addChat("ai",lastAnswer);placePointer(j.point);if(j.completed && task.current_step<task.steps.length){task.steps[task.current_step].done=true;task.current_step++;if(task.current_step>=task.steps.length){task.completed=true;task.completed_at=new Date().toISOString()}save();renderAll()}$("agentState").textContent=task.completed?"Completed":"Ready"}catch(e){$("agentState").textContent="Error";toast("Agent error: "+e.message)}}
+function placePointer(p){if(!p){$("pointer").classList.add("hidden");$("target").classList.add("hidden");return}let v=$("screen");$("pointer").classList.remove("hidden");$("target").classList.remove("hidden");$("pointer").style.left=(p.x*100)+"%";$("pointer").style.top=(p.y*100)+"%";$("target").style.left=Math.min(78,p.x*100)+"%";$("target").style.top=Math.min(78,p.y*100)+"%";$("target").textContent=p.label||"Next action"}
+function addChat(who,text){let d=document.createElement("div");d.className="msg "+(who==="user"?"user":"ai");d.textContent=text;$("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight}
+$("voice").onclick=()=>{let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast("Voice input is not supported in this browser");return}let r=new SR();r.lang="en-IN";r.onresult=e=>{let t=e.results[0][0].transcript;addChat("user",t);if(!task){task={goal:t,steps:[],current_step:0,completed:false};api("/api/tasks/plan",{method:"POST",body:JSON.stringify({goal:t})}).then(j=>{task=j;save();renderAll()})}else{task.goal=t;save();renderAll()}};r.start()};
+$("speak").onclick=()=>{if(lastAnswer&&speechSynthesis)speechSynthesis.speak(new SpeechSynthesisUtterance(lastAnswer))};
+$("record").onclick=()=>{if(recorder){recorder.stop();return}if(!stream){toast("Start screen share first");return}let v=$("screen"),c=document.createElement("canvas"),ctx=c.getContext("2d");c.width=v.videoWidth||1280;c.height=v.videoHeight||720;let cs=c.captureStream(5);recorder=new MediaRecorder(cs);chunks=[];recorder.ondataavailable=e=>e.data.size&&chunks.push(e.data);recorder.onstop=()=>{let blob=new Blob(chunks,{type:"video/webm"}),url=URL.createObjectURL(blob);let r={time:new Date().toISOString(),url};sessions.unshift(r);save();$("record").textContent="Record";recorder=null;toast("Recording saved to replay")};recorder.start();$("record").textContent="Stop Record";(function draw(){if(!recorder)return;ctx.drawImage(v,0,0,c.width,c.height);requestAnimationFrame(draw)})()};
+function renderTask(){if(!task){$("goalBox").textContent="Create a task to begin.";$("steps").innerHTML="";$("pct").textContent="0%";$("bar").style.width="0%";$("stepCount").textContent="0/0";return}$("goalBox").textContent=task.goal;let done=task.steps.filter(s=>s.done).length,p=Math.round(done/task.steps.length*100);$("pct").textContent=p+"%";$("bar").style.width=p+"%";$("stepCount").textContent=done+"/"+task.steps.length;$("steps").innerHTML=task.steps.map((s,i)=>`<div class="step ${s.done?"done":""}"><div class="dot">${s.done?"✓":i+1}</div><div><b>${s.title}</b><div class="muted small">${i===task.current_step&&!s.done?"Current step":" "}</div></div></div>`).join("")}
+function renderDashboard(){$("dTasks").textContent=task?1:0;$("dDone").textContent=task?.completed?1:0;$("dSessions").textContent=sessions.length;$("recentTasks").innerHTML=task?`<div class="step"><div><b>${task.goal}</b><div class="muted small">${task.completed?"Completed":"In progress"} · ${Math.round(task.current_step/task.steps.length*100)}%</div></div></div>`:"No tasks yet."}
+function renderHistory(){$("historyRows").innerHTML=task?`<tr><td>${new Date(task.created_at||Date.now()).toLocaleString()}</td><td>${task.goal}</td><td><span class="pill">${task.completed?"Completed":"In progress"}</span></td><td>${Math.round(task.current_step/task.steps.length*100)}%</td></tr>`:""}
+function renderReplay(){$("replays").innerHTML=sessions.length?sessions.map((r,i)=>`<div class="step"><div class="dot">🎥</div><div><b>Session ${sessions.length-i}</b><div class="muted small">${new Date(r.time).toLocaleString()}</div><a href="${r.url}" download="screenguide-session.webm">Open recording</a></div></div>`).join(""):"No recordings yet."}
+function renderAll(){renderTask();renderDashboard();renderHistory();renderReplay()}
+if(token&&user)showApp();else showAuth();
+</script>
+</body></html>
