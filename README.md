@@ -1,56 +1,141 @@
 # ScreenGuide AI — Phase 8
 
-Production-style architecture for the ScreenGuide AI screen-sharing assistant.
+**An AI-powered screen-sharing assistant for visual guidance and real-time interaction.**
 
-## Included
-- JWT authentication
-- Secure bcrypt password hashing
-- SQLAlchemy persistence
-- SQLite default + PostgreSQL-ready `DATABASE_URL`
-- Dynamic task planning with the vision model
-- Screenshot-based visual guidance
-- WebSocket transport foundation for real-time agent communication
-- Screen sharing, continuous analysis, visual pointer
-- Voice input + speech output
-- Session recording/replay
-- Dashboard, history, admin/team UI
+ScreenGuide AI is a screen-sharing assistant designed to help users understand on-screen content through screenshot-based visual guidance, voice interaction, and AI-assisted task planning.
 
-## Run
+## ✨ Features
 
-### Windows
-```bat
-cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-set OPENAI_API_KEY=YOUR_KEY
-set JWT_SECRET=YOUR_RANDOM_SECRET
-uvicorn main:app --reload
+- **AI-assisted task planning** — Dynamic planning using a vision model.
+- **Visual guidance** — Screenshot-based analysis to help users understand screen content.
+- **Screen sharing** — Share and analyze on-screen content.
+- **Real-time communication** — WebSocket foundation for agent communication.
+- **Voice interaction** — Voice input and speech output.
+- **Authentication** — JWT-based authentication and bcrypt password hashing.
+- **Database persistence** — SQLAlchemy with SQLite support and PostgreSQL configuration.
+- **Session history** — Session recording and replay support.
+- **Dashboard** — User interface for dashboard, history, and admin/team workflows.
+
+## 🛠️ Technology Stack
+
+- **Backend:** Python, FastAPI
+- **Database layer:** SQLAlchemy, SQLite, PostgreSQL-ready configuration
+- **Authentication:** JWT, bcrypt
+- **Communication:** WebSockets
+- **AI integration:** Vision-model-based task planning
+- **Frontend:** HTML, CSS, JavaScript
+
+## 📁 Project Structure
+
+```text
+ScreenGuide-AI-Phase8-Production/
+├── backend/
+│   ├── main.py
+│   ├── automation.py
+│   ├── requirements.txt
+│   └── frontend/
+├── frontend/
+├── .env.example
+├── .gitignore
+└── README.md
 ```
 
-Open http://127.0.0.1:8000/frontend/index.html
+## 🚀 Getting Started
 
-### Linux/macOS
+### Prerequisites
+
+- Python 3.10 or a compatible version supported by the dependencies
+- Git
+- Required AI API credentials
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/vishnudevmishra23/ScreenGuide-AI-Phase8-Production.git
+cd ScreenGuide-AI-Phase8-Production
+```
+
+### 2. Create a virtual environment
+
+**Windows PowerShell:**
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+**macOS/Linux:**
+
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-export OPENAI_API_KEY=YOUR_KEY
-export JWT_SECRET=YOUR_RANDOM_SECRET
+```
+
+### 4. Configure environment variables
+
+Create a local environment configuration using `.env.example` as a reference. Set the actual variable names required by the backend, including your AI provider API key and a strong random JWT secret.
+
+Keep real credentials out of Git and never commit them to the repository.
+
+### 5. Start the backend
+
+From the `backend` directory, run:
+
+```bash
 uvicorn main:app --reload
 ```
 
-Open http://127.0.0.1:8000/frontend/index.html
+When the server starts successfully, open:
 
-## PostgreSQL
-Set:
-`DATABASE_URL=postgresql+psycopg2://USER:PASSWORD@HOST:5432/screenguide`
+- API health check: `http://127.0.0.1:8000/api/health`
+- API documentation: `http://127.0.0.1:8000/docs`
 
-## Important
-- Keep `OPENAI_API_KEY` only on the server.
-- Use HTTPS in deployed environments because browser screen sharing requires a secure context outside localhost.
-- Restrict CORS in production.
-- Use a strong random JWT secret.
-- For production, move recordings from browser object URLs to authenticated object storage.
-- The agent only guides the user; it does not autonomously click/type/submit.
+Open the frontend using the route or local serving method configured by the project.
+
+## ⚙️ Database Configuration
+
+SQLite is supported by default. PostgreSQL can be configured using the database URL expected by the application.
+
+Example format:
+
+```text
+postgresql+psycopg2://USER:PASSWORD@HOST:5432/screenguide
+```
+
+Replace the placeholders with your own database details. Never commit real database credentials.
+
+## 🔐 Security Notes
+
+- Store API keys and secrets in local environment variables.
+- Keep `.env` files out of version control.
+- Use a strong, randomly generated JWT secret.
+- Use HTTPS in deployed environments where browser screen sharing requires a secure context.
+- Configure appropriate CORS restrictions before deployment.
+- Protect session recordings and any stored user data.
+
+## 🗺️ Roadmap
+
+Potential future improvements:
+
+- Automated testing and continuous integration
+- Deployment configuration and monitoring
+- Improved documentation and troubleshooting
+- Additional accessibility and user-experience enhancements
+
+## 👨‍💻 Author
+
+**Vishnu Dev Mishra**
+
+GitHub: [@vishnudevmishra23](https://github.com/vishnudevmishra23)
+
+## 📄 License
+
+No license has been specified yet. Add a license file if you intend to define how others may use, modify, and distribute this project.
